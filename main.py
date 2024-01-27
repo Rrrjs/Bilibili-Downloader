@@ -8,7 +8,7 @@ import subprocess
 
 def is_process_running(process_name):
     for proc in psutil.process_iter(['name']):
-        if proc.info['name'] == process_name:
+        if proc.info['name'] == process_name: # type: ignore
             return True
     return False
 
@@ -22,6 +22,12 @@ print('\033[0;33;40m开始下载\033[0m')
 #获取当前时间
 time_value = time.strftime('%Y-%m-%d-%H%M%S', time.localtime())
 print(time_value)
+
+def open_folder():
+    # 利用explorer.exe执行
+    current_directory = os.getcwd()
+    start_directory = r'%s\download'%current_directory
+    os.system("explorer.exe %s" % start_directory)
 
 def download(url: str, fname: str):
     # 用流stream的方式获取url的数据
@@ -63,6 +69,7 @@ if __name__ == "__main__":
                     print('\033[0;31;40m下载出错\033[0m')
             print('\033[0;32;40m视频下载完成\033[0m')
             print('\033[0;32;40m保存于download文件夹\033[0m')
+            open_folder()
             input()
         else:
             url = url_returns[0][0]
@@ -70,6 +77,7 @@ if __name__ == "__main__":
             download(url, title)
             print('\033[0;32;40m视频下载完成\033[0m')
             print('\033[0;32;40m保存于download文件夹\033[0m')
+            open_folder()
             # 检测终端是否在运行
             if is_process_running("WindowsTerminal.exe"):
                 pass
